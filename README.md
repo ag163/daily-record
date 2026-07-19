@@ -8,9 +8,7 @@
 
 ## 截图
 
-![应用截图总览](docs/screenshots/overview.jpg)
-
-单张小图见 docs/screenshots/（约 360px 宽）。
+![应用截图](docs/screenshots/overview.jpg)
 
 ## 功能
 

@@ -57,6 +57,15 @@ final class ReminderScheduler {
     }
 
     static void sync(Context context, boolean notifyIfDue) {
+        SharedPreferences preferences = context.getSharedPreferences(
+            PREFERENCES_NAME,
+            Context.MODE_PRIVATE
+        );
+        // Capture before cancel so "过会再提醒" / pending repeat is not rewritten
+        // to "now + interval" every time the app opens.
+        long previousNextAt = preferences.getLong(NEXT_ALARM_AT_KEY, 0L);
+        String previousAction = preferences.getString(NEXT_ALARM_ACTION_KEY, "");
+
         cancelAlarm(context, ACTION_MAIN, MAIN_REQUEST_CODE);
         cancelAlarm(context, ACTION_MAIN, MAIN_REQUEST_CODE + 50);
         cancelAlarm(context, ACTION_REPEAT, REPEAT_REQUEST_CODE);
@@ -104,9 +113,55 @@ final class ReminderScheduler {
 
         if (notifyIfDue) {
             showReminder(context, true);
+            scheduleNextRepeat(context, state, now);
+        } else {
+            restoreOrSchedulePendingRepeat(
+                context,
+                state,
+                now,
+                previousNextAt,
+                previousAction
+            );
         }
-        scheduleNextRepeat(context, state, now);
         Log.i(TAG, "Past due; next main " + nextMain.getTime() + " notifyIfDue=" + notifyIfDue);
+    }
+
+    /**
+     * Keep an already-scheduled same-day REPEAT (e.g. snooze) when the app is
+     * merely opened. Only create a fresh "now + interval" repeat when there is
+     * no future same-day REPEAT left.
+     */
+    private static void restoreOrSchedulePendingRepeat(
+        Context context,
+        JSONObject state,
+        Calendar now,
+        long previousNextAt,
+        String previousAction
+    ) {
+        long nowMs = now.getTimeInMillis();
+        Calendar midnight = (Calendar) now.clone();
+        midnight.add(Calendar.DAY_OF_MONTH, 1);
+        midnight.set(Calendar.HOUR_OF_DAY, 0);
+        midnight.set(Calendar.MINUTE, 0);
+        midnight.set(Calendar.SECOND, 0);
+        midnight.set(Calendar.MILLISECOND, 0);
+        long midnightMs = midnight.getTimeInMillis();
+
+        boolean preserveRepeat =
+            ACTION_REPEAT.equals(previousAction) &&
+            previousNextAt > nowMs + 2_000L &&
+            previousNextAt < midnightMs;
+
+        if (preserveRepeat) {
+            Calendar when = Calendar.getInstance();
+            when.setTimeInMillis(previousNextAt);
+            scheduleAlarm(context, ACTION_REPEAT, REPEAT_REQUEST_CODE, when);
+            Log.i(TAG, "Preserved pending repeat at " + when.getTime());
+            return;
+        }
+
+        // No future snooze/repeat left for today: keep the day covered.
+        scheduleNextRepeat(context, state, now);
     }
 
     static void handleAlarm(Context context, String action) {

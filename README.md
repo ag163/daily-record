@@ -4,6 +4,18 @@
 
 默认对外文案保持中性（「每日记录」），不在启动器名称、图标和系统通知里暴露具体事项内容。
 
+
+
+## 截图
+
+| 场景 | 预览 |
+| --- | --- |
+| 状态栏时间与通知 | ![状态栏时间](docs/screenshots/00-status-time.jpg) |
+| 通知动作：已完成 / 过会再提醒 / 今天不再提醒 | ![通知动作](docs/screenshots/01-notification-actions.jpg) |
+| 提醒设置 | ![提醒设置](docs/screenshots/02-reminder-settings.jpg) |
+| 通知中心 | ![通知中心](docs/screenshots/03-notification-shade.jpg) |
+| 首页待确认 | ![首页](docs/screenshots/04-home-pending.jpg) |
+
 ## 功能
 
 - 今日状态一眼可见：待确认 / 已完成 / 未完成

@@ -8,7 +8,7 @@
 
 ## 截图
 
-![应用截图](docs/screenshots/overview.jpg)
+![应用截图](docs/screenshots/app-preview.jpg)
 
 ## 功能
 

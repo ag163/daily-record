@@ -14,3 +14,8 @@ See `docs/agents/triage-labels.md`.
 
 This is a single-context repository.
 See `docs/agents/domain.md`.
+
+## Git author
+
+- Commit / push author name must use the GitHub username `ag163`, never the real-name display (e.g. 周俊翔).
+- Prefer GitHub noreply email `64060149+ag163@users.noreply.github.com` for this repository.

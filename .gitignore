@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+output/
+dogfood-output/
+*.apk
+*.aab
+*.ap_
+*.aar
+
+# Local / agent scratch
+.scratch/
+.temp/
+*.log
+.DS_Store
+Thumbs.db
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+google-services.json
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Test / coverage
+coverage/
+.vitest/
+
+# Android
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+android/capacitor-cordova-android-plugins/
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+android/app/src/main/res/xml/config.xml
+
+# Local build logs / caches
+android/build-out.txt
+android/build-err.txt
+**/__pycache__/
+*.pyc
